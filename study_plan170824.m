@@ -1,14 +1,17 @@
 %--------------------------------------------------------------------------
 % Stevens Institute of Technology
 % title:    study_plan
-% date:     20170822
+% date:     20170824
 % function: 1.0 compare difference concentrations and certificates
-%               contain test function
-% version:  1.0
+%               contain ***test function
+%           1.1 increase the function of comparing in the table
+%               increase the function of saving excel files.
+%               change some funcs to sub-fucs
+% version:  1.1
 % by:       ZHE
 
 %--------------------------------------------------------------------------
-% function study_plan170822()
+% function study_plan170824()
 clear all;
 close all;
 clc;
@@ -111,53 +114,33 @@ course1(1+length(math)+length(core):length(math)+length(core)+length(skill)) = s
 course1(1+length(math)+length(core)+length(skill):end) = con;
 % list the duplicate courses
 result1 = tabulate(course1);
-% [lon1,lat1] = size(result1);
-% a = zeros(1,lon1);
-% a(1,:) = [result1{:,2}];
-% a1 = find(a(:)>1);
 a1 = find([result1{:,2}]>1);
-% a2 = string(zeros(1,length(a1)));
 for i = 1:length(a1)
-%     a2(i) = result1{a1(i),1};
     a2 = result1{a1(i),1};
-%     a3 = find(course1 == a2(i));
-%     a3 = find(course1 == a2);
-%     fprintf('%s is important!\n',a2(i));
     fprintf('%s is important!\n',a2);
-%     for j = 1:length(a3)
-%         if (1<=a3(j)) && (a3(j)<=length(math))
-%                 fprintf('It is on your Math Course list!\n');
-%             elseif (1+length(math)<=a3(j)) && ...
-%                     (a3(j)<=length(math)+length(core))
-%                 fprintf('It is on your Core Course list!\n');
-%             elseif (1+length(math)+length(core)<=a3(j)) &&...
-%                     (a3(j)<=length(math)+length(core)+length(skill))
-%                 fprintf('It is on your Skill Course list!\n');
-%             elseif (1+length(math)+length(core)+length(skill)<=a3(j)) &&...
-%                     (a3(j)<=length(math)+length(core)+length(skill)+length(con))
-%                 fprintf('It is on your Concentration Course list!\n');
-%         end
-        
-            if find(math == a2)
-                fprintf('It is on your Math Course list!\n');
-            end
-            if find(core == a2)
-                fprintf('It is on your Core Course list!\n');
-            end
-            if find(skill == a2)
-                fprintf('It is on your Skill Course list!\n');
-            end
-            if find(con == a2)
-                fprintf('It is on your Concentration Course list!\n');
-            end
-%     end
+    if find(math == a2)
+        fprintf('It is on your Math Course list!\n');
+    end
+    if find(core == a2)
+        fprintf('It is on your Core Course list!\n');
+    end
+    if find(skill == a2)
+        fprintf('It is on your Skill Course list!\n');
+    end
+    if find(con == a2)
+        fprintf('It is on your Concentration Course list!\n');
+    end
 end
+fprintf('\n');
+fprintf('Your major is %s\n',temp2);
+fprintf('Your program is %s\n',temp4);
+fprintf('Your concentration is con%s\n',temp6); % ***details,like full name,save,etc
 fprintf('\n');
 
 % the certificate you can take
 fprintf('Which certificate do you choose?\n');
 fprintf('1 for Software Design for Embedded and Information Systems\n');
-fprintf('2 for Data Engineering\n');
+fprintf('2 for Data Engineering\n'); % There is no such certificate on the website.
 fprintf('3 for Autonomous Robotics\n');
 fprintf('4 for Real-Time & Embedded Systems\n');
 fprintf('5 for Digital Signal Processing\n');
@@ -168,7 +151,6 @@ fprintf('9 for Secure Network Systems Design\n');
 fprintf('10 for Microelectronics and Photonics\n');
 temp7 = 'If you want to choose more than one certificate,please input"[x,x,...]".\ne.g.[1,4,7,3]\n';
 temp8(1,:) = input(temp7);
-
 %display
 cer_b = string(zeros(length(temp8(1,:)),50));
 for i = 1:length(temp8(1,:))
@@ -185,144 +167,68 @@ for i = 1:length(temp8(1,:))
 end
 cer_c = cer_b(:,1:max(temp8(2,:)));
 clear cer_b;
-
 fprintf('\n');
 
 % list the duplicate courses
 fprintf('Here are some duplicate courses\nbetween your certificate and yours courses.\n');
-course2 = [course1,cer_a];
-result2 = tabulate(course2);
-b1 = find([result2{:,2}]>1);
-Math = zeros(length(b1),1);
-Core = zeros(length(b1),1);
-Skill = zeros(length(b1),1);
-Con = zeros(length(b1),1);
-% for i = 1:length(temp8(1,:))
-% %     name1 = ['cer',num2str(temp8(1,i))];
-% %     eval([strcat(name1,'=zeros(length(b1),1)');]);
-%     eval(strcat(['cer',num2str(temp8(1,i))],'=zeros(length(b1),1)'));
-% end
-% cer1 = zeros(length(temp8(1,:)),length(b1));
-cer_d = zeros(length(b1),length(temp8(1,:)));
-course_name1 = cell(4+length(temp8(1,:)),1);
-for i = 1:length(b1)
-    b2 = result2{b1(i),1};
-    fprintf('%s is important!\n',b2);
-    course_name1(i) = {b2};
-    if find(math == b2)
-        fprintf('It is on your Math Course list!\n');
-        Math(i) = 1;
-    end
-    if find(core == b2)
-        fprintf('It is on your Core Course list!\n');
-        Core(i) = 1;
-    end
-    if find(skill == b2)
-        fprintf('It is on your Skill Course list!\n');
-        Skill(i) = 1;
-    end
-    if find(con == b2)
-        fprintf('It is on your Concentration Course list!\n');
-        Con(i) = 1;
-    end
-    for j = 1:length(temp8(1,:))
-        if find(cer_c(j,:) == b2)
-            fprintf('It is on your Certificate%d Course list!\n',temp8(1,j));
-%             eval(['cer',num2str(temp8(1,i))])(j,1) = 1;
-            cer_d(i,j) = 1;
-        end
-    end
-end
-% for i = 1:length(temp8(1,:))
-%     eval(strcat(['Cer',num2str(temp8(1,i))],'=cer_d(:,i)'));
-% end
-
-
-
-
-
-
-% A1 = table(Math,Core,Skill,Con,cer1','RowNames',course_name1);
-% A1 = table(Math,Core,Skill,Con,cer_d,'RowNames',course_name1);
-% A1 = table(Math,Core,Skill,Con,eval(stract(['Cer',num2str(temp8(1,:)')])),'RowNames',course_name1);
-
-% A2 = table(Math,Core,Skill,Con,'RowNames',course_name1);
-% for i = 1:length(temp8(1,:))
-%     %         A2(:,4+i) = table(eval(strcat(['Cer',num2str(temp8(1,i))],'=cer_d(:,i)')));
-%     A2(:,4+i) = table(eval(['Cer',num2str(temp8(1,i))]));
-%     T.Properties.VariableNames{strcat('Var',num2str(4+i))} = strcat('Cer',num2str(temp8(1,i)));
-% end
-
-A3 = table;
-A3.Math = Math;
-A3.Core = Core;
-A3.Skill = Skill;
-A3.Con = Con;
-for i = 1:length(temp8(1,:))
-%     A3.(strcat(['Cer',num2str(temp8(1,i))])) = eval(['Cer',num2str(temp8(1,i))]);
-    A3.(strcat(['Cer',num2str(temp8(1,i))])) = cer_d(:,i);
-end
-% xlswrite('C:\temp\test.xls',C); % ***test function
+T = dupli_list(course1,cer_a,temp8,math,core,skill,con,cer_c);
 fprintf('\n');
+disp(T);
+fprintf('\n');
+fprintf( 'Do you want to save this sheet?[Y/N]\n');
+temp11 = 'C:\\test9527.xls(You should be the administrator of this computer)\n'; % ***choose output sheet name and path
+temp12 = input(temp11,'s');
+if temp12 == 'y'
+    file_name = 'C:\test9527.xls';
+    save_xls(T,file_name);
+end
 
 % other information about certificates and your concentration
 fprintf('Here are other information about certificate courses and your concentration courses.\n');
 temp9 = 'Do you want to continue?[Y/N]\n';
 temp10 = input(temp9,'s');
+fprintf('This function will generate 10 Excel files in your C:\\n');
+temp13 = 'Do you want this function to generate 10 Excel files in your C:\?[Y/N]\n';
+temp14 = input(temp13,'s');
 if temp10 == 'y'
     for j = 1:10
-        cer_temp1 = disp_cer(j);        
-        fprintf('Here are some duplicate courses\nbetween Certificate%d and yours courses.\n',j);
-        course3 = [course1,cer_temp1];
-        result3 = tabulate(course3);
-        c1 = find([result3{:,2}]>1);
-        for i = 1:length(c1)
-            c2 = result3{c1(i),1};
-            fprintf('%s is important!\n',c2);
-            if find(math == c2)
-                fprintf('It is on your Math Course list!\n');
-            end
-            if find(core == c2)
-                fprintf('It is on your Core Course list!\n');
-            end
-            if find(skill == c2)
-                fprintf('It is on your Skill Course list!\n');
-            end
-            if find(con == c2)
-                fprintf('It is on your Concentration Course list!\n');
-            end
-            if find(cer_temp1 == c2)
-                fprintf('It is on your Certificate%d Course list!\n',j);
-            end
-        end
-        clear cer_temp1 course3 result3 c1 c2,
+        cer_temp1 = disp_cer(j);
+        Ta = dupli_list(course1,cer_temp1,j,math,core,skill,con,cer_temp1);
+%         eval(strcat(['T',num2str(j)],'=Ta'));
         fprintf('\n');
+        disp(Ta);
+        fprintf('\n');
+        if temp14 == 'y'
+            switch j
+                case 1
+                    f_title = 'Software Design for Embedded and Information Systems';
+                case 2
+                    f_title = 'Data Engineering';
+                case 3
+                    f_title = 'Autonomous Robotics';
+                case 4
+                    f_title = 'Real-Time & Embedded Systems';
+                case 5
+                    f_title = 'Digital Signal Processing';
+                case 6
+                    f_title = 'Multimedia Technology';
+                case 7
+                    f_title = 'Wireless Communications';
+                case 8
+                    f_title = 'Networked Information Systems';
+                case 9
+                    f_title = 'Secure Network Systems Design';
+                case 10
+                    f_title = 'Microelectronics and Photonics';
+            end
+            file_name = strcat('C:\',f_title,'.xls');
+            save_xls(Ta,file_name);
+        end
+        clear cer_temp1 Ta,
     end
 end
-
         
 % end      
-        
-        
-        
-        
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
 
 function y = disp_cer(x)
 
@@ -352,4 +258,69 @@ end
 
 end
 
+function T = dupli_list(course,cer_one,cer_c_l,math,core,skill,con,cer_mul)
 
+course1 = [course,cer_one];
+result = tabulate(course1);
+a1 = find([result{:,2}]>1);
+Math = zeros(length(a1),1);
+Core = zeros(length(a1),1);
+Skill = zeros(length(a1),1);
+Con = zeros(length(a1),1);
+cer_d = zeros(length(a1),length(cer_c_l(1,:)));
+course_name = cell(length(cer_c_l(1,:)),1);
+for i = 1:length(a1)
+    a2 = result{a1(i),1};
+    fprintf('%s is important!\n',a2);
+    course_name(i) = {a2};
+    if find(math == a2)
+        fprintf('It is on your Math Course list!\n');
+        Math(i) = 1;
+    end
+    if find(core == a2)
+        fprintf('It is on your Core Course list!\n');
+        Core(i) = 1;
+    end
+    if find(skill == a2)
+        fprintf('It is on your Skill Course list!\n');
+        Skill(i) = 1;
+    end
+    if find(con == a2)
+        fprintf('It is on your Concentration Course list!\n');
+        Con(i) = 1;
+    end
+    for j = 1:length(cer_c_l(1,:))
+        if find(cer_mul(j,:) == a2)
+            fprintf('It is on your Certificate%d Course list!\n',cer_c_l(1,j));
+            cer_d(i,j) = 1;
+        end
+    end
+end
+% set the table
+T = table('RowNames',course_name);
+T.Math = Math;
+T.Core = Core;
+T.Skill = Skill;
+T.Con = Con;
+for i = 1:length(cer_c_l(1,:))
+    T.(strcat(['Cer',num2str(cer_c_l(1,i))])) = cer_d(:,i);
+end
+
+end
+
+function save_xls(T,file_name)
+    T1 = table2cell(T);
+    T2 = [T.Properties.VariableNames;T1];
+    T3 = [cat(1,{'CourseName'},T.Properties.RowNames),T2];
+    if exist(file_name,'file') % ***it will cover the old ones,add change name and path function
+%         temp1 = 'There is a file with the same name,do you want cover it?[Y/N]\n';
+%         temp2 = input(temp1,'s');
+%         if temp2 == 'y'
+%             delete C:\test9527.xls;
+            delete (file_name);
+            xlswrite(file_name,T3);
+%         end
+    else
+        xlswrite(file_name,T3);
+    end
+end
