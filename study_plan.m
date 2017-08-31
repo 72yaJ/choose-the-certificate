@@ -1,20 +1,23 @@
+%--------------------------------------------------------------------------
 % Stevens Institute of Technology
 % title:    study_plan
-% date:     20170825
+% date:     20170826
 % function: 1.0 compare difference concentrations and certificates
 %               contain ***test function
 %           1.1 increase the function of comparing in the table
 %               increase the function of saving excel files.
 %               change some funcs to sub-fucs
 %           1.2 optimize the variables' names for easier input
-%           1.3 ***add the index of courses
+%           1.3 show the certificate course names in excel
+%               optimize the code
+%               ***add the index of courses
 %               ***merge the excel docs into 1 doc including many sheets
-%               ***show certificate names
-% version:  1.2
+%               !!!have something to be noticed
+% version:  1.3
 % by:       ZHE
 
 %--------------------------------------------------------------------------
-% function study_plan170825()
+% function study_plan170826()
 clear all;
 close all;
 clc;
@@ -31,6 +34,7 @@ fprintf('\n');
 
 % choose major to know which core courses you need
 temp1 = 'Which major are you study,EE,CPE or IDE?\n';
+global temp2;
 temp2 = input(temp1,'s');
 switch temp2
     case 'ee'
@@ -48,6 +52,7 @@ fprintf('\n');
 
 % choose program to know which skill courses you need
 temp3 = 'Which program are you study,MS or ME?\n';
+global temp4;
 temp4 = input(temp3,'s');
 switch temp4
     case 'ms'
@@ -130,6 +135,7 @@ T1 = dupli_list(course1,[],0,math,core,skill,con,[]);
 fprintf('\n');
 fprintf('Your major is %s\n',temp2);
 fprintf('Your program is %s\n',temp4);
+global con_name;
 switch temp6
     case 1
         con_name = con_name1;
@@ -191,7 +197,7 @@ temp8(1,:) = input(temp7);
 %display
 cer_b = string(zeros(length(temp8(1,:)),50));
 for i = 1:length(temp8(1,:))
-    cer_temp = disp_cer(temp8(1,i)); 
+    cer_temp =  disp_cer(temp8(1,i)); 
     fprintf('There are %d courses for cer%d(select 4):\n',length(cer_temp),temp8(1,i));
     fprintf(' %s\n',cer_temp);
     temp8(2,i) = length(cer_temp);
@@ -213,6 +219,7 @@ fprintf('\n');
 fprintf('Your major is %s\n',temp2);
 fprintf('Your program is %s\n',temp4);
 fprintf('Your concentration is %s\n',con_name);
+global cer_name;
 cer_name = string(zeros(1,length(temp8(1,:))));
 for i = 1:length(temp8(1,:))
     switch temp8(1,i)
@@ -243,76 +250,35 @@ fprintf('\n');
 disp(T);
 fprintf('\n');
 fprintf( 'Do you want to save this sheet?[Y/N]\n');
-temp11 = 'C:\\test9527.xls(You should be the administrator of this computer)\n'; % ***choose output sheet name and path
+temp11 = 'C:\\users\\public\\test9527.xlsx\n'; % ***choose output sheet name and path
 temp12 = input(temp11,'s');
 if temp12 == 'y'
-    file_name = 'C:\test9527.xls';
-    save_xls(T,file_name);
+    file_name = 'C:\users\public\test9527.xlsx';
+    save_xlsx(T,file_name);
 end
+fprintf('\n');
 
 % other information about certificates and your concentration
 fprintf('Here is other information about certificate courses and your concentration courses.\n');
 temp9 = 'Do you want to continue?[Y/N]\n';
 temp10 = input(temp9,'s');
 if temp10 == 'y'
-    fprintf('This function will generate 10 Excel files in your C:\\\n'); % ***merge the excel docs into 1 doc including many sheets
-    temp13 = 'Do you want this function to generate 10 Excel files in your C:\\?[Y/N]\n';
+    fprintf('This function will generate 10 Excel files in your C:\\users\\public\\\n'); % ***merge the excel docs into 1 doc including many sheets
+    temp13 = 'Do you want this function to generate 10 Excel files in your C:\\users\\public\\?[Y/N]\n';
     temp14 = input(temp13,'s');
     for j = 1:10
         cer_temp1 = disp_cer(j);
         Ta = dupli_list(course1,cer_temp1,j,math,core,skill,con,cer_temp1);
-%         eval(strcat(['T',num2str(j)],'=Ta')); % with the 'disp' func
         fprintf('\n');
-        switch j
-            case 1
-                fprintf('%s is your certificate.\n',cer_name1);
-            case 2
-                fprintf('%s is your certificate.\n',cer_name2);
-            case 3
-                fprintf('%s is your certificate.\n',cer_name3);
-            case 4
-                fprintf('%s is your certificate.\n',cer_name4);
-            case 5
-                fprintf('%s is your certificate.\n',cer_name5);
-            case 6
-                fprintf('%s is your certificate.\n',cer_name6);
-            case 7
-                fprintf('%s is your certificate.\n',cer_name7);
-            case 8
-                fprintf('%s is your certificate.\n',cer_name8);
-            case 9
-                fprintf('%s is your certificate.\n',cer_name9);
-            case 10
-                fprintf('%s is your certificate.\n',cer_name10);
-        end
+        fprintf('%s is your certificate.\n',eval(strcat(['cer_name',num2str(j)])));
         fprintf('\n');    
         disp(Ta);
         fprintf('\n');
         if temp14 == 'y'
-            switch j
-                case 1
-                    f_title = 'Software Design for Embedded and Information Systems';
-                case 2
-                    f_title = 'Data Engineering';
-                case 3
-                    f_title = 'Autonomous Robotics';
-                case 4
-                    f_title = 'Real-Time & Embedded Systems';
-                case 5
-                    f_title = 'Digital Signal Processing';
-                case 6
-                    f_title = 'Multimedia Technology';
-                case 7
-                    f_title = 'Wireless Communications';
-                case 8
-                    f_title = 'Networked Information Systems';
-                case 9
-                    f_title = 'Secure Network Systems Design';
-                case 10
-                    f_title = 'Microelectronics and Photonics';
-            end
-            file_name = strcat('C:\',f_title,'.xls');
-            save_xls(Ta,file_name);
+            f_title = eval(strcat(['cer_name',num2str(j)]));
+            cer_name = string(eval(strcat(['cer_name',num2str(j)]))); % have to make sure the program following will not use this variable any more!!!
+            file_name = strcat('C:\users\public\',f_title,'.xlsx');
+            save_xlsx(Ta,file_name);
         end
         clear cer_temp1 Ta,
     end
@@ -348,7 +314,7 @@ end
 
 end
 
-function T = dupli_list(course,cer_one,cer_c_l,math,core,skill,con,cer_mul)
+function T = dupli_list(course,cer_one,cer_c_l,math,core,skill,con,cer_mul) % ****add flag not finished
 
 course1 = [course,cer_one];
 result = tabulate(course1);
@@ -358,9 +324,8 @@ Core = zeros(length(a1),1);
 Skill = zeros(length(a1),1);
 Con = zeros(length(a1),1);
 if cer_c_l ~= 0
-cer_d = zeros(length(a1),length(cer_c_l(1,:)));
+    cer_d = zeros(length(a1),length(cer_c_l(1,:)));
 end
-% course_name = cell(length(cer_c_l(1,:)),1);
 course_name = cell(length(a1),1);
 for i = 1:length(a1)
     a2 = result{a1(i),1};
@@ -383,12 +348,12 @@ for i = 1:length(a1)
         Con(i) = 1;
     end
     if cer_c_l ~= 0
-    for j = 1:length(cer_c_l(1,:))
-        if find(cer_mul(j,:) == a2)
-            fprintf('It is on your Certificate%d Course list!\n',cer_c_l(1,j)); % ***change to name
-            cer_d(i,j) = 1;
+        for j = 1:length(cer_c_l(1,:))
+            if find(cer_mul(j,:) == a2)
+                fprintf('It is on your Certificate%d Course list!\n',cer_c_l(1,j)); % ***change to name
+                cer_d(i,j) = 1;
+            end
         end
-    end
     end
 end
 % set the table
@@ -405,19 +370,31 @@ end
 
 end
 
-function save_xls(T,file_name) % ***show certificate names ***add a flag to choose whether show certificates' names in excel files
-    T1 = table2cell(T);
-    T2 = [T.Properties.VariableNames;T1];
-    T3 = [cat(1,{'CourseName'},T.Properties.RowNames),T2];
-    if exist(file_name,'file') % ***it will cover the old ones,add change name and path function
-%         temp1 = 'There is a file with the same name,do you want cover it?[Y/N]\n';
-%         temp2 = input(temp1,'s');
-%         if temp2 == 'y'
-%             delete C:\test9527.xls;
-            delete (file_name);
-            xlswrite(file_name,T3);
-%         end
-    else
-        xlswrite(file_name,T3);
-    end
+function save_xlsx(T,file_name) % ***show certificate names ***add a flag to choose whether show certificates' names in excel files
+    
+global temp2;
+global temp4;
+global con_name;
+global cer_name; % the cer_name is not changed as main fuction
+T1 = table2cell(T);
+T2 = [T.Properties.VariableNames;T1];
+T3 = [cat(1,{'CourseNumber'},T.Properties.RowNames),T2];
+T4 = table;
+T4(1,1) = {''};
+T4(1,2) = {''};
+T4(1,3) = {temp2};
+T4(1,4) = {temp4};
+[~,lat] = size(T3);
+T4(1,5) = {con_name};
+for i = 5+1:lat
+    T4(1,i) = {cer_name{1,i-5}};
+end
+T5 = table2cell(cat(1,T3,T4));
+if exist(file_name,'file') % ***it will cover the old ones,add change name and path function
+    delete (file_name);
+    xlswrite(file_name,T5);
+else
+    xlswrite(file_name,T5);
+end
+
 end
