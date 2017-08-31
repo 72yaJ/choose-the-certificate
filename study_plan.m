@@ -250,10 +250,10 @@ fprintf('\n');
 disp(T);
 fprintf('\n');
 fprintf( 'Do you want to save this sheet?[Y/N]\n');
-temp11 = 'C:\\users\\public\\test9527.xlsx\n'; % ***choose output sheet name and path
+temp11 = strcat('C:\\users\\public\\con_',con_name,'.xlsx\n'); % ***choose output sheet name and path
 temp12 = input(temp11,'s');
 if temp12 == 'y'
-    file_name = 'C:\users\public\test9527.xlsx';
+    file_name = strcat('C:\users\public\con_',con_name,'.xlsx');
     save_xlsx(T,file_name);
 end
 fprintf('\n');
