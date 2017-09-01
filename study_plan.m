@@ -298,6 +298,26 @@ if temp10 == 'y'
         end
         clear cer_temp1 Ta,
     end
+    
+% excelFileName = 'Test.xls';
+% excelFilePath = pwd; % Current working directory.
+% sheetName = 'Sheet'; % EN: Sheet, DE: Tabelle, etc. (Lang. dependent)
+% % Open Excel file.
+objExcel = actxserver('Excel.Application');
+objExcel.Workbooks.Open('C:\users\public\certificate.xlsx'); % Full path is necessary!
+% Delete sheets.
+try
+      % Throws an error if the sheets do not exist.
+      objExcel.ActiveWorkbook.Worksheets.Item('Sheet1').Delete;
+catch
+      ; % Do nothing.
+end
+% Save, close and clean up.
+objExcel.ActiveWorkbook.Save;
+objExcel.ActiveWorkbook.Close;
+objExcel.Quit;
+objExcel.delete;    
+    
 end
         
 % end      
