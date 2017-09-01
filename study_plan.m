@@ -17,7 +17,8 @@
 % by:       ZHE
 
 %--------------------------------------------------------------------------
-% function study_plan170826()
+% function study_plan()
+
 clear all;
 close all;
 clc;
@@ -77,7 +78,7 @@ con_name6 = 'Embedded Systems';
 con_name7 = 'Software Engineering';
 con_name8 = 'Data Engineering';
 con_name9 = 'Networks and Security';
-con_name10 = 'Networks:Business Practices';
+con_name10 = 'Networks_Business Practices';
 fprintf('1 for %s\n',con_name1);
 fprintf('2 for %s\n',con_name2);
 fprintf('3 for %s\n',con_name3);
@@ -264,8 +265,6 @@ fprintf('Here is other information about certificate courses and your concentrat
 temp9 = 'Do you want to continue?[Y/N]\n';
 temp10 = input(temp9,'s');
 if temp10 == 'y'
-%     fprintf('This function will generate 10 Excel files in your C:\\users\\public\\\n'); % ***merge the excel docs into 1 doc including many sheets
-%     temp13 = 'Do you want this function to generate 10 Excel files in your C:\\users\\public\\?[Y/N]\n';
     fprintf('This function will generate 1 Excel file with 10 sheets in your C:\\users\\public\\\n');
     temp13 = 'Do you want this function to generate this Excel file in your C:\\users\\public\\?[Y/N]\n';
     temp14 = input(temp13,'s');
@@ -289,35 +288,21 @@ if temp10 == 'y'
         disp(Ta);
         fprintf('\n');
         if temp14 == 'y'
-%             f_title = eval(strcat(['cer_name',num2str(j)]));
             cer_name = string(eval(strcat(['cer_name',num2str(j)]))); % have to make sure the program following will not use this variable any more!!!
-%             file_name = strcat('C:\users\public\',f_title,'.xlsx');
             file_name = strcat('C:\users\public\certificate.xlsx');
             save_xlsx(Ta,file_name,sheet_name{j},write_flag);
             write_flag = 0;
         end
         clear cer_temp1 Ta,
     end
-    
-% excelFileName = 'Test.xls';
-% excelFilePath = pwd; % Current working directory.
-% sheetName = 'Sheet'; % EN: Sheet, DE: Tabelle, etc. (Lang. dependent)
-% % Open Excel file.
 objExcel = actxserver('Excel.Application');
-objExcel.Workbooks.Open('C:\users\public\certificate.xlsx'); % Full path is necessary!
-% Delete sheets.
-try
-      % Throws an error if the sheets do not exist.
-      objExcel.ActiveWorkbook.Worksheets.Item('Sheet1').Delete;
-catch
-      ; % Do nothing.
-end
-% Save, close and clean up.
+objExcel.Workbooks.Open(file_name);
+objExcel.ActiveWorkbook.Worksheets.Item('Sheet1').Delete;
 objExcel.ActiveWorkbook.Save;
 objExcel.ActiveWorkbook.Close;
 objExcel.Quit;
-objExcel.delete;    
-    
+objExcel.delete;
+clear objExcel;
 end
         
 % end      

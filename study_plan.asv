@@ -17,7 +17,8 @@
 % by:       ZHE
 
 %--------------------------------------------------------------------------
-% function study_plan170826()
+% function study_plan()
+
 clear all;
 close all;
 clc;
@@ -77,7 +78,7 @@ con_name6 = 'Embedded Systems';
 con_name7 = 'Software Engineering';
 con_name8 = 'Data Engineering';
 con_name9 = 'Networks and Security';
-con_name10 = 'Networks:Business Practices';
+con_name10 = 'Networks_Business Practices';
 fprintf('1 for %s\n',con_name1);
 fprintf('2 for %s\n',con_name2);
 fprintf('3 for %s\n',con_name3);
@@ -254,7 +255,7 @@ temp11 = strcat('C:\\users\\public\\con_',con_name,'.xlsx\n'); % ***choose outpu
 temp12 = input(temp11,'s');
 if temp12 == 'y'
     file_name = strcat('C:\users\public\con_',con_name,'.xlsx');
-    write_flag = 0;
+    write_flag = 1;
     save_xlsx(T,file_name,'',write_flag);
 end
 fprintf('\n');
@@ -264,8 +265,6 @@ fprintf('Here is other information about certificate courses and your concentrat
 temp9 = 'Do you want to continue?[Y/N]\n';
 temp10 = input(temp9,'s');
 if temp10 == 'y'
-%     fprintf('This function will generate 10 Excel files in your C:\\users\\public\\\n'); % ***merge the excel docs into 1 doc including many sheets
-%     temp13 = 'Do you want this function to generate 10 Excel files in your C:\\users\\public\\?[Y/N]\n';
     fprintf('This function will generate 1 Excel file with 10 sheets in your C:\\users\\public\\\n');
     temp13 = 'Do you want this function to generate this Excel file in your C:\\users\\public\\?[Y/N]\n';
     temp14 = input(temp13,'s');
@@ -289,15 +288,21 @@ if temp10 == 'y'
         disp(Ta);
         fprintf('\n');
         if temp14 == 'y'
-%             f_title = eval(strcat(['cer_name',num2str(j)]));
             cer_name = string(eval(strcat(['cer_name',num2str(j)]))); % have to make sure the program following will not use this variable any more!!!
-%             file_name = strcat('C:\users\public\',f_title,'.xlsx');
             file_name = strcat('C:\users\public\certificate.xlsx');
             save_xlsx(Ta,file_name,sheet_name{j},write_flag);
             write_flag = 0;
         end
         clear cer_temp1 Ta,
     end
+objExcel = actxserver('Excel.Application');
+objExcel.Workbooks.Open(file_name);
+objExcel.ActiveWorkbook.Worksheets.Item('Sheet1').Delete;
+objExcel.ActiveWorkbook.Save;
+objExcel.ActiveWorkbook.Close;
+objExcel.Quit;
+objExcel.delete;
+clear objExcel;
 end
         
 % end      
@@ -406,7 +411,7 @@ for i = 5+1:lat
     T4(1,i) = {cer_name{1,i-5}};
 end
 T5 = table2cell(cat(1,T3,T4));
-if exist(file_name,'file') % ***it will cover the old ones,add change name and path function
+if flag == 1 && exist(file_name,'file') % ***it will cover the old ones,add change name and path function
     delete (file_name);
     xlswrite(file_name,T5,sheet_name);
 else
