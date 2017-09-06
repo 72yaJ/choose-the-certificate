@@ -10,14 +10,15 @@
 %           1.2 optimize the variables' names for easier input
 %           1.3 show the certificate course names in excel
 %               optimize the code
+%           1.4 merge the excel docs into 1 doc including many sheets
 %               ***add the index of courses
-%               ***merge the excel docs into 1 doc including many sheets
 %               !!!have something to be noticed
-% version:  1.3
+% version:  1.4
 % by:       ZHE
 
 %--------------------------------------------------------------------------
-% function study_plan170826()
+% function study_plan()
+
 clear all;
 close all;
 clc;
@@ -77,7 +78,7 @@ con_name6 = 'Embedded Systems';
 con_name7 = 'Software Engineering';
 con_name8 = 'Data Engineering';
 con_name9 = 'Networks and Security';
-con_name10 = 'Networks:Business Practices';
+con_name10 = 'Networks_Business Practices';
 fprintf('1 for %s\n',con_name1);
 fprintf('2 for %s\n',con_name2);
 fprintf('3 for %s\n',con_name3);
@@ -250,11 +251,12 @@ fprintf('\n');
 disp(T);
 fprintf('\n');
 fprintf( 'Do you want to save this sheet?[Y/N]\n');
-temp11 = 'C:\\users\\public\\test9527.xlsx\n'; % ***choose output sheet name and path
+temp11 = strcat('C:\\users\\public\\con_',con_name,'.xlsx\n'); % ***choose output sheet name and path
 temp12 = input(temp11,'s');
 if temp12 == 'y'
-    file_name = 'C:\users\public\test9527.xlsx';
-    save_xlsx(T,file_name);
+    file_name = strcat('C:\users\public\con_',con_name,'.xlsx');
+    write_flag = 1;
+    save_xlsx(T,file_name,'',write_flag);
 end
 fprintf('\n');
 
@@ -263,9 +265,20 @@ fprintf('Here is other information about certificate courses and your concentrat
 temp9 = 'Do you want to continue?[Y/N]\n';
 temp10 = input(temp9,'s');
 if temp10 == 'y'
-    fprintf('This function will generate 10 Excel files in your C:\\users\\public\\\n'); % ***merge the excel docs into 1 doc including many sheets
-    temp13 = 'Do you want this function to generate 10 Excel files in your C:\\users\\public\\?[Y/N]\n';
+    fprintf('This function will generate 1 Excel file with 10 sheets in your C:\\users\\public\\\n');
+    temp13 = 'Do you want this function to generate this Excel file in your C:\\users\\public\\?[Y/N]\n';
     temp14 = input(temp13,'s');
+    sheet_name(1,1) = "SD4EnIS"; % Software Design for Embedded and Information Systems
+    sheet_name(1,2) = "DE"; % Data Engineering
+    sheet_name(1,3) = "AR"; % Autonomous Robotics
+    sheet_name(1,4) = "R-T&ES"; % Real-Time & Embedded Systems
+    sheet_name(1,5) = "DSP"; % Digital Signal Processing
+    sheet_name(1,6) = "MT"; % Multimedia Technology
+    sheet_name(1,7) = "WC"; % Wireless Communications
+    sheet_name(1,8) = "NIS"; % Networked Information Systems
+    sheet_name(1,9) = "SNSD"; % Secure Network Systems Design
+    sheet_name(1,10) = "MnP"; % Microelectronics and Photonics
+    write_flag = 1;
     for j = 1:10
         cer_temp1 = disp_cer(j);
         Ta = dupli_list(course1,cer_temp1,j,math,core,skill,con,cer_temp1);
@@ -275,13 +288,21 @@ if temp10 == 'y'
         disp(Ta);
         fprintf('\n');
         if temp14 == 'y'
-            f_title = eval(strcat(['cer_name',num2str(j)]));
             cer_name = string(eval(strcat(['cer_name',num2str(j)]))); % have to make sure the program following will not use this variable any more!!!
-            file_name = strcat('C:\users\public\',f_title,'.xlsx');
-            save_xlsx(Ta,file_name);
+            file_name = strcat('C:\users\public\certificate.xlsx');
+            save_xlsx(Ta,file_name,sheet_name{j},write_flag);
+            write_flag = 0;
         end
         clear cer_temp1 Ta,
     end
+objExcel = actxserver('Excel.Application');
+objExcel.Workbooks.Open(file_name);
+objExcel.ActiveWorkbook.Worksheets.Item('Sheet1').Delete;
+objExcel.ActiveWorkbook.Save;
+objExcel.ActiveWorkbook.Close;
+objExcel.Quit;
+objExcel.delete;
+clear objExcel;
 end
         
 % end      
@@ -370,7 +391,7 @@ end
 
 end
 
-function save_xlsx(T,file_name) % ***show certificate names ***add a flag to choose whether show certificates' names in excel files
+function save_xlsx(T,file_name,sheet_name,flag) % ***show certificate names ***add a flag to choose whether show certificates' names in excel files
     
 global temp2;
 global temp4;
@@ -390,11 +411,11 @@ for i = 5+1:lat
     T4(1,i) = {cer_name{1,i-5}};
 end
 T5 = table2cell(cat(1,T3,T4));
-if exist(file_name,'file') % ***it will cover the old ones,add change name and path function
+if flag == 1 && exist(file_name,'file') % ***it will cover the old ones,add change name and path function
     delete (file_name);
-    xlswrite(file_name,T5);
+    xlswrite(file_name,T5,sheet_name);
 else
-    xlswrite(file_name,T5);
+    xlswrite(file_name,T5,sheet_name);
 end
 
 end
