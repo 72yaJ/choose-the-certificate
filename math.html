@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>math</title>	
+
+	<link href='http://fonts.googleapis.com/css?family=Sintony:400,700' rel='stylesheet' type='text/css'>
+
+	<style type="text/css">    
+  body
+  {
+    background-color:#255;
+  }
+
+  h1
+  {
+    font-size:48px;
+    margin-top:0;
+    font-family:Arial, sans-serif;
+    text-shadow:2px 0 15px #292929;
+    letter-spacing:4px;
+    text-decoration:none;
+    color:#DDD;
+  }
+
+  #banner
+  {
+    width:1000px;
+    height:500px;
+    background-image:url(./static/2.jpg);
+
+    background-repeat:no-repeat;
+    border-radius:5px;
+  }
+
+  .lead
+  {
+    background-color:rgba(255,255,255,0.6);
+    border-radius:3px;
+    box-shadow:rgba(0,0,0,0.2) 0 1px 3px;
+    font-family:Sintony, sans-serif;
+  }
+	</style>
+</head>  
+  
+<body>
+	<div id="banner">
+		<p class = 'lead'>{{input1}}<p>
+<!--
+		<p class="lead"><strong>{{input2}}</strong></p>
+-->
+		<p class = 'lead'>
+		{% for x in input2 %}
+			<strong><a href=# title = '1'>{{x}}  </a></strong>	
+		{% endfor %}
+		</p>
+
+
+		<form action = '/core' method = 'post'>
+		<p><button name = 'sub' type = ‘submit’ value = 'Y'>Continue</button>
+		<button name = 'sub' type = 'submit' value = 'N'
+			formaction = '/' formmethod = 'get'>Quit</button></p>
+		</form>
+<!--	
+		<button onclick = "myfunc()">try it</button>
+		<p id = 'demo' class = 'lead'></p>
+-->
+
+	</div>
+
+
+<!--
+	<script>
+		function myfunc(){
+		document.getElementById('demo').innerHTML = 123
+	}</script>
+-->
+
+</body>
+</html>
